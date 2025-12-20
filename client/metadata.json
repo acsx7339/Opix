@@ -1,0 +1,5 @@
+{
+  "name": "TruthCircle",
+  "description": "A community platform dedicated to discussing and verifying the truthfulness of statements in verifiable categories like Science and History. Features a ranked voting system for comments and AI-powered insights.",
+  "requestFramePermissions": []
+}

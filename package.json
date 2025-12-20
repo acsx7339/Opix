@@ -1,0 +1,13 @@
+{
+  "name": "truth-circle-root",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "install:all": "npm install && cd client && npm install && cd ../server && npm install",
+    "build": "node build.js",
+    "start": "cd server && node index.js",
+    "dev": "echo 'For local dev: Open two terminals. Run \"cd client && npm run dev\" in one, and \"cd server && npm run dev\" in the other.'"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
