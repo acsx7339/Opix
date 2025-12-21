@@ -11,9 +11,9 @@ export default defineConfig(({ mode }) => {
     },
     server: {
       proxy: {
-        // Point to localhost instead of Docker container name
+        // In Docker, use service name instead of localhost
         '/api': {
-          target: 'http://localhost:3001',
+          target: process.env.VITE_API_URL || 'http://server:3001',
           changeOrigin: true,
         },
       },
