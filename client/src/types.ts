@@ -20,6 +20,9 @@ export interface User {
   username: string;
   avatar: string;
   email: string;
+  level: 'trainee' | 'member' | 'expert' | 'moderator' | 'admin';
+  reputation: number;
+  loginCount: number;
 }
 
 export type CommentType = 'supplement' | 'refutation' | 'general';

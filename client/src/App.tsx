@@ -31,7 +31,7 @@ const App: React.FC = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [createTab, setCreateTab] = useState<'discussion' | 'poll'>('discussion');
   const [newTopicTitle, setNewTopicTitle] = useState('');
-  const [newTopicCategory, setNewTopicCategory] = useState<Category>(Category.SCIENCE);
+  const [newTopicCategory, setNewTopicCategory] = useState<Category>(Category.TECHNOLOGY);
   const [pollOptions, setPollOptions] = useState<string[]>(['', '']);
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -513,15 +513,17 @@ const App: React.FC = () => {
               {/* User Level & Reputation Badge */}
               <div className="hidden lg:flex flex-col items-end text-xs">
                 <div className="flex items-center gap-1">
-                  <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${user.level === 'moderator' ? 'bg-purple-100 text-purple-700' :
-                    user.level === 'expert' ? 'bg-blue-100 text-blue-700' :
-                      user.level === 'member' ? 'bg-green-100 text-green-700' :
-                        'bg-gray-100 text-gray-600'
+                  <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${user.level === 'admin' ? 'bg-red-100 text-red-700' :
+                    user.level === 'moderator' ? 'bg-purple-100 text-purple-700' :
+                      user.level === 'expert' ? 'bg-blue-100 text-blue-700' :
+                        user.level === 'member' ? 'bg-green-100 text-green-700' :
+                          'bg-gray-100 text-gray-600'
                     }`}>
-                    {user.level === 'moderator' ? '版主' :
-                      user.level === 'expert' ? '專家' :
-                        user.level === 'member' ? '正式會員' :
-                          '見習生'}
+                    {user.level === 'admin' ? '管理員' :
+                      user.level === 'moderator' ? '版主' :
+                        user.level === 'expert' ? '專家' :
+                          user.level === 'member' ? '正式會員' :
+                            '見習生'}
                   </span>
                   <span className="text-gray-500">•</span>
                   <span className="font-bold text-orange-600">{user.reputation || 0} 聲望</span>

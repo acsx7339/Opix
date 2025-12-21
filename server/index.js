@@ -259,11 +259,13 @@ app.post('/api/invitations/generate', authenticateToken, async (req, res) => {
       'trainee': 0,      // 見習生無法生成
       'member': 3,       // 正式會員最多3個
       'expert': 10,      // 專家最多10個
-      'moderator': 20    // 版主最多20個
+      'moderator': 20,   // 版主最多20個
+      'admin': 999       // 管理員無限
     };
 
+
     // Check if user is system admin (unlimited codes)
-    const isAdmin = username === 'admin';
+    const isAdmin = username === 'admin' || userLevel === 'admin';
     const maxCodes = isAdmin ? 999 : (CODE_LIMITS[userLevel] || 0);
 
     // Check if trainee/novice
@@ -611,6 +613,11 @@ app.post('/api/boards/check-access', authenticateToken, async (req, res) => {
     }
 
     const user = userResult.rows[0];
+
+    // Admin always has access
+    if (user.user_level === 'admin' || user.username === 'admin') {
+      return res.json({ canAccess: true });
+    }
 
     // Check requirements
     const checks = {
