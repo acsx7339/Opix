@@ -13,6 +13,21 @@ SOURCE_DIR="Depoly_Source"  # The folder where you git clone your repo
 TARGET_DIR="."              # The current directory (App Root)
 
 echo "========================================"
+
+# Check Node Version
+NODE_VER=$(node -v | cut -d. -f1 | sed 's/v//')
+echo "🔍 Current Node.js Version: $(node -v)"
+
+if [ "$NODE_VER" -lt 20 ]; then
+    echo "❌ Error: Node.js version is too old ($NODE_VER). We need v20+."
+    echo "💡 Fix: You must activate the virtual environment first."
+    echo "   1. Go to cPanel -> Setup Node.js App"
+    echo "   2. Copy the 'Enter to the virtual environment' command"
+    echo "   3. Paste and run it here, then run this script again."
+    exit 1
+fi
+
+echo "========================================"
 echo "🚀 Starting Deployment Process"
 echo "========================================"
 
