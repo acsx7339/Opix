@@ -12,6 +12,14 @@
 SOURCE_DIR="Depoly_Source"  # The folder where you git clone your repo
 TARGET_DIR="."              # The current directory (App Root)
 
+# Auto-activate A2 Hosting Virtual Environment (if verification file exists)
+# This path is specific to your server environment
+VENV_PATH="/home/pcbabyco/nodevenv/open.pc-baby.com/20/bin/activate"
+if [ -f "$VENV_PATH" ]; then
+    echo "🔌 Found virtual environment. Activating..."
+    source "$VENV_PATH"
+fi
+
 echo "========================================"
 
 # Check Node Version
