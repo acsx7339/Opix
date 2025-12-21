@@ -1,21 +1,15 @@
 export enum Category {
   POLITICS = 'Politics',
-  SCIENCE = 'Science',
-  HISTORY = 'History',
-  TECHNOLOGY = 'Technology',
+  ECONOMICS = 'Economics',
   HEALTH = 'Health',
-  ENVIRONMENT = 'Environment',
-  ECONOMICS = 'Economics'
+  TECHNOLOGY = 'Technology'
 }
 
 export const CATEGORY_NAMES: Record<Category, string> = {
-  [Category.POLITICS]: '政治',
-  [Category.SCIENCE]: '科學',
-  [Category.HISTORY]: '歷史',
-  [Category.TECHNOLOGY]: '科技',
-  [Category.HEALTH]: '健康',
-  [Category.ENVIRONMENT]: '環境',
-  [Category.ECONOMICS]: '經濟',
+  [Category.POLITICS]: '政治與社會',
+  [Category.ECONOMICS]: '經濟與理財',
+  [Category.HEALTH]: '健康與醫療',
+  [Category.TECHNOLOGY]: '科技與3C',
 };
 
 export type SortOption = 'newest' | 'hot' | 'controversial' | 'credible';
@@ -44,6 +38,10 @@ export interface Comment {
   parentId?: string; // For nested replies
   type: CommentType;
   stance: CommentStance;
+  ipAddress?: string;
+  country?: string;
+  city?: string;
+  region?: string;
 }
 
 export interface PollOption {
@@ -64,11 +62,11 @@ export interface Topic {
   aiAnalysis?: string;
   isAnalyzing?: boolean;
   isFavorite?: boolean; // New: Is this topic in user's favorites?
-  
+
   // Discussion Mode
-  credibleVotes: number;      
-  controversialVotes: number; 
-  userTopicVote?: 'credible' | 'controversial'; 
+  credibleVotes: number;
+  controversialVotes: number;
+  userTopicVote?: 'credible' | 'controversial';
 
   // Poll Mode
   options?: PollOption[];
