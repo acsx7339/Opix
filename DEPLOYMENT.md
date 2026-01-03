@@ -1,6 +1,6 @@
-# TruthCircle - A2 Hosting 部署指南
+# Opix - A2 Hosting 部署指南
 
-本指南將協助您將 TruthCircle 部署到 A2 Hosting。
+本指南將協助您將 Opix 部署到 A2 Hosting。
 
 ## 📋 前置準備
 

@@ -1,10 +1,10 @@
-# TruthCircle
+# Opix
 
-真相圈 - 一個基於事實驗證的社群討論平台，讓使用者能夠針對各種議題進行理性討論、事實查核與觀點分享。
+Opix - 一個基於事實驗證的社群討論平台，讓使用者能夠針對各種議題進行理性討論、事實查核與觀點分享。
 
 ## 📋 專案簡介
 
-TruthCircle 是一個現代化的討論平台，特色包括：
+Opix 是一個現代化的討論平台，特色包括：
 
 - 🎯 **多類別主題討論**：科學、歷史、科技、健康、環境、經濟、政治等分類
 - 💬 **互動式留言系統**：支持立場標記（支持/反對/中立）和投票功能
@@ -65,7 +65,7 @@ npm run install:all
 在 `server` 目錄建立 `.env` 檔案：
 
 ```env
-DATABASE_URL=postgresql://username:password@localhost:5432/truthcircle
+DATABASE_URL=postgresql://username:password@localhost:5432/opix
 JWT_SECRET=your-secret-key
 NODE_ENV=development
 PORT=3001

@@ -482,7 +482,7 @@ const App: React.FC = () => {
       {/* Verify Toast */}
       {verifyStatus && (
         <div className={`fixed top-4 left-1/2 -translate-x-1/2 z-[100] px-6 py-3 rounded-lg shadow-xl font-bold flex items-center gap-2 animate-bounce ${verifyStatus === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`}>
-          {verifyStatus === 'success' ? <><CheckCircle size={20} /> 驗證成功！歡迎加入 TruthCircle</> : <><AlertCircle size={20} /> 驗證失敗或連結已過期</>}
+          {verifyStatus === 'success' ? <><CheckCircle size={20} /> 驗證成功！歡迎加入 Opix</> : <><AlertCircle size={20} /> 驗證失敗或連結已過期</>}
           <button onClick={() => setVerifyStatus(null)} className="ml-2 bg-white/20 rounded-full p-1"><X size={14} /></button>
         </div>
       )}
@@ -493,10 +493,8 @@ const App: React.FC = () => {
             <Menu className="text-gray-600" />
           </button>
           <div className="flex items-center gap-2 cursor-pointer" onClick={() => handleSelectView('home')}>
-            <div className="w-8 h-8 bg-gray-800 rounded-sm flex items-center justify-center text-white rotate-3 shadow-md">
-              <span className="font-hand font-bold text-lg">T</span>
-            </div>
-            <h1 className="text-2xl font-hand font-bold text-gray-800 hidden sm:block">TruthCircle</h1>
+            <img src="/opix-logo.png" className="w-8 h-8 rotate-3 shadow-md object-contain" alt="Opix Logo" />
+            <h1 className="text-2xl font-hand font-bold text-gray-800 hidden sm:block">Opix</h1>
           </div>
         </div>
 

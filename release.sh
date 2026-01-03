@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ==========================================
-# TruthCircle Release Helper Script
+# Opix Release Helper Script
 # ==========================================
 # Usage: ./release.sh
 #
