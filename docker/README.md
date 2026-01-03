@@ -1,6 +1,6 @@
-# TruthCircle Docker 開發環境
+# Opix Docker 開發環境
 
-這個資料夾包含了 TruthCircle 專案的 Docker 開發環境設定，讓您無需在本機安裝 Node.js、npm 或 PostgreSQL 即可運行整個應用。
+這個資料夾包含了 Opix 專案的 Docker 開發環境設定，讓您無需在本機安裝 Node.js、npm 或 PostgreSQL 即可運行整個應用。
 
 ## 📦 包含的服務
 
@@ -96,13 +96,13 @@ docker-compose exec client sh
 
 ```bash
 # 連接到 PostgreSQL
-docker-compose exec postgres psql -U truthcircle -d truthcircle
+docker-compose exec postgres psql -U opix -d opix
 
 # 備份資料庫
-docker-compose exec postgres pg_dump -U truthcircle truthcircle > backup.sql
+docker-compose exec postgres pg_dump -U opix opix > backup.sql
 
 # 還原資料庫
-docker-compose exec -T postgres psql -U truthcircle truthcircle < backup.sql
+docker-compose exec -T postgres psql -U opix opix < backup.sql
 ```
 
 ## 📁 檔案結構
@@ -120,9 +120,9 @@ docker/
 
 ### 資料庫
 
-- **使用者**: truthcircle
-- **密碼**: truthcircle_password
-- **資料庫名稱**: truthcircle
+- **使用者**: opix
+- **密碼**: opix_password
+- **資料庫名稱**: opix
 
 ### JWT
 

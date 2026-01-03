@@ -5,39 +5,39 @@ import { Topic, CATEGORY_NAMES } from "../types";
 let aiClient: GoogleGenAI | null = null;
 
 const getAiClient = () => {
-    if (!aiClient) {
-        // Safe check for API Key
-        const apiKey = process.env.API_KEY;
-        if (!apiKey || apiKey === 'undefined') {
-            console.warn("Gemini API Key is missing!");
-            return null;
-        }
-        try {
-            aiClient = new GoogleGenAI({ apiKey });
-        } catch (e) {
-            console.error("Failed to initialize Gemini Client:", e);
-            return null;
-        }
+  if (!aiClient) {
+    // Safe check for API Key
+    const apiKey = process.env.API_KEY;
+    if (!apiKey || apiKey === 'undefined') {
+      console.warn("Gemini API Key is missing!");
+      return null;
     }
-    return aiClient;
+    try {
+      aiClient = new GoogleGenAI({ apiKey });
+    } catch (e) {
+      console.error("Failed to initialize Gemini Client:", e);
+      return null;
+    }
+  }
+  return aiClient;
 };
 
 export const analyzeTopicVeracity = async (topic: Topic): Promise<string> => {
   try {
     const ai = getAiClient();
     if (!ai) {
-        return "系統提示：目前無法連接 AI 服務 (API Key 未設定)。請聯繫管理員。";
+      return "系統提示：目前無法連接 AI 服務 (API Key 未設定)。請聯繫管理員。";
     }
 
     const categoryName = CATEGORY_NAMES[topic.category];
-    
+
     // Aggregate comments for AI analysis
-    const commentSummary = topic.comments.length > 0 
-        ? topic.comments.map(c => `- [${c.stance === 'support' ? '支持' : c.stance === 'oppose' ? '反對' : '中立'} / ${c.type === 'supplement' ? '補充' : c.type === 'refutation' ? '反駁' : '一般'}] ${c.authorName}: ${c.content}`).join('\n')
-        : "目前尚無使用者評論。";
+    const commentSummary = topic.comments.length > 0
+      ? topic.comments.map(c => `- [${c.stance === 'support' ? '支持' : c.stance === 'oppose' ? '反對' : '中立'} / ${c.type === 'supplement' ? '補充' : c.type === 'refutation' ? '反駁' : '一般'}] ${c.authorName}: ${c.content}`).join('\n')
+      : "目前尚無使用者評論。";
 
     const prompt = `
-      你是一個「TruthCircle」社群的智慧分析師。
+      你是一個「Opix」社群的智慧分析師。
       請根據主題本身以及使用者的討論內容，進行綜合分析與歸納。
       請務必使用 **繁體中文 (Traditional Chinese)** 回答。
       

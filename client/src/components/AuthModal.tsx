@@ -98,7 +98,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onLoginSuccess })
                     </button>
 
                     <h2 className="text-2xl font-hand font-bold text-center mb-6 text-gray-800">
-                        {mode === 'login' ? '歡迎回來 TruthCircle' : '加入 TruthCircle'}
+                        {mode === 'login' ? '歡迎回來 Opix' : '加入 Opix'}
                     </h2>
 
                     {/* Tabs */}
@@ -181,8 +181,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onLoginSuccess })
                                                     validateInvitationCode(val);
                                                 }}
                                                 className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-gray-800 focus:outline-none ${codeValid === true ? 'border-green-500 bg-green-50' :
-                                                        codeValid === false ? 'border-red-500 bg-red-50' :
-                                                            'border-gray-300'
+                                                    codeValid === false ? 'border-red-500 bg-red-50' :
+                                                        'border-gray-300'
                                                     }`}
                                                 placeholder="輸入您的邀請碼"
                                                 maxLength={12}

@@ -2,7 +2,7 @@
 
 ## 🎉 成功啟動！
 
-您的 TruthCircle 應用程式已經在 Docker 環境中成功運行！
+您的 Opix 應用程式已經在 Docker 環境中成功運行！
 
 ![成功運行截圖](/Users/fachu/.gemini/antigravity/brain/d7af7b18-871d-43a9-8ebe-c1c5d6cfda46/screenshot_success.png)
 
@@ -22,9 +22,9 @@
 所有三個服務都正常運行：
 
 ```
-✅ truthcircle_db       - PostgreSQL 15 資料庫
-✅ truthcircle_server   - Node.js 20 後端 API
-✅ truthcircle_client   - Node.js 20 + Vite 前端
+✅ opix_db       - PostgreSQL 15 資料庫
+✅ opix_server   - Node.js 20 後端 API
+✅ opix_client   - Node.js 20 + Vite 前端
 ```
 
 ## 🔧 解決的問題
@@ -58,7 +58,7 @@ server: {
 ## 📁 專案結構
 
 ```
-truthcircle_測試環境/
+opix_測試環境/
 ├── client/                    # 前端程式碼
 ├── server/                    # 後端程式碼
 └── docker/                    # Docker 設定 (獨立資料夾)

@@ -64,9 +64,9 @@ docker compose up -d
 - **前端**: http://localhost:8081
 - **後端 API**: http://localhost:3001
 - **資料庫**: localhost:5432
-  - 使用者: truthcircle
-  - 密碼: truthcircle_password
-  - 資料庫名稱: truthcircle
+  - 使用者: opix
+  - 密碼: opix_password
+  - 資料庫名稱: opix
 
 ## ✨ 特性
 - ✅ 使用 Node.js 20
