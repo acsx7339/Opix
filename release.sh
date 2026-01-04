@@ -30,7 +30,7 @@ git pull origin main
 
 # 2. Merge Develop
 echo "🔀 Step 2: Merging Develop into Main..."
-git merge develop
+git merge develop --no-edit
 
 if [ $? -ne 0 ]; then
     echo "❌ Merge conflict! Please resolve conflicts manually and then run this script again."
