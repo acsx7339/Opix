@@ -646,17 +646,31 @@ app.post('/api/auth/reset-password/:token', async (req, res) => {
   }
 
   try {
-    // Find user with valid token
-    const userResult = await pool.query(
-      'SELECT * FROM users WHERE reset_token = $1 AND reset_token_expires > $2',
-      [token, Date.now()]
+    // 1. First, find user just by token (to distinguishing between invalid token vs expired)
+    const tokenResult = await pool.query(
+      'SELECT * FROM users WHERE reset_token = $1',
+      [token]
     );
 
-    if (userResult.rows.length === 0) {
-      return res.status(400).json({ error: '重置連結無效或已過期' });
+    if (tokenResult.rows.length === 0) {
+      console.log('❌ Password reset failed: Token not found:', token);
+      return res.status(400).json({ error: '重置連結無效（可能已被使用或無效）' });
     }
 
-    const user = userResult.rows[0];
+    const user = tokenResult.rows[0];
+    const now = Date.now();
+    const expires = parseInt(user.reset_token_expires);
+
+    console.log(`ℹ️ Verifying token for user ${user.username}`);
+    console.log(`   Current time: ${now}`);
+    console.log(`   Expires time: ${expires}`);
+    console.log(`   Remaining: ${(expires - now) / 1000 / 60} minutes`);
+
+    // 2. Check expiry
+    if (now > expires) {
+      console.log('❌ Password reset failed: Token expired');
+      return res.status(400).json({ error: '重置連結已過期，請重新申請' });
+    }
 
     // Hash new password
     const hashedPassword = await bcrypt.hash(password, 10);

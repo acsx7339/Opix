@@ -27,13 +27,16 @@ services:
       JWT_SECRET: your-development-jwt-secret-key-change-in-production
       NODE_ENV: development
       PORT: 3001
-      # SMTP Settings for password reset emails
+      # SMTP Settings (Password Reset)
       SMTP_HOST: open.pc-baby.com
       SMTP_PORT: 465
       SMTP_SECURE: true
       SMTP_USER: admin@open.pc-baby.com
       SMTP_PASS: sjwd5407
       SMTP_FROM: admin@open.pc-baby.com
+      # DOMAIN: 連結產生的網址
+      # 本地開發用 http://localhost:8081
+      # 正式環境請在線上 .env 修改為 https://open.pc-baby.com
       DOMAIN: http://localhost:8081
     ports:
       - "3001:3001"
