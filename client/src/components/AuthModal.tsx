@@ -21,18 +21,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onLoginSuccess })
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [successMsg, setSuccessMsg] = useState<string | null>(null);
-    const [isEarlyAccess, setIsEarlyAccess] = useState(false);
 
-    React.useEffect(() => {
-        if (mode === 'register') {
-            fetch('/api/auth/registration-status')
-                .then(res => res.json())
-                .then(data => {
-                    setIsEarlyAccess(data.isEarlyAccess);
-                })
-                .catch(err => console.error(err));
-        }
-    }, [mode]);
 
     // Validate invitation code
     const validateInvitationCode = async (code: string) => {
@@ -179,25 +168,23 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onLoginSuccess })
 
                                     <div>
                                         <label className="block text-xs font-bold text-gray-500 uppercase mb-1">
-                                            邀請碼 {!isEarlyAccess && <span className="text-red-500">*</span>}
-                                            {isEarlyAccess && <span className="ml-2 text-[10px] bg-green-100 text-green-700 px-2 py-0.5 rounded-full">早鳥免邀請碼</span>}
+                                            邀請碼 <span className="text-red-500">*</span>
                                         </label>
                                         <div className="relative">
                                             <input
                                                 type="text"
-                                                required={!isEarlyAccess}
+                                                required
                                                 value={invitationCode}
                                                 onChange={e => {
                                                     const val = e.target.value.toUpperCase();
                                                     setInvitationCode(val);
-                                                    if (val) validateInvitationCode(val);
-                                                    else setCodeValid(null);
+                                                    validateInvitationCode(val);
                                                 }}
                                                 className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-gray-800 focus:outline-none ${codeValid === true ? 'border-green-500 bg-green-50' :
-                                                    (codeValid === false && invitationCode) ? 'border-red-500 bg-red-50' :
+                                                    codeValid === false ? 'border-red-500 bg-red-50' :
                                                         'border-gray-300'
                                                     }`}
-                                                placeholder={isEarlyAccess ? "邀請碼 (選填)" : "輸入您的邀請碼"}
+                                                placeholder="輸入您的邀請碼"
                                                 maxLength={12}
                                             />
                                             {codeValidating && (
@@ -210,7 +197,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onLoginSuccess })
                                                     <CheckCircle size={18} className="text-green-500" />
                                                 </div>
                                             )}
-                                            {!codeValidating && codeValid === false && invitationCode && (
+                                            {!codeValidating && codeValid === false && (
                                                 <div className="absolute right-3 top-1/2 -translate-y-1/2">
                                                     <AlertCircle size={18} className="text-red-500" />
                                                 </div>
@@ -222,9 +209,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onLoginSuccess })
                                             </p>
                                         )}
                                         <p className="text-xs text-gray-500 mt-1">
-                                            {isEarlyAccess
-                                                ? `目前是早鳥階段 (前 50 名)，可直接註冊！`
-                                                : "需要邀請碼才能註冊。請向現有會員索取。"}
+                                            需要邀請碼才能註冊。請向現有會員索取。
                                         </p>
                                     </div>
                                 </>
