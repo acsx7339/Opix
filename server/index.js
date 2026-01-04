@@ -844,7 +844,8 @@ app.get('/api/topics', async (req, res) => {
             userVote: vote ? vote.vote_type : undefined,
             parentId: comment.parent_id,
             type: comment.type || 'general',
-            stance: comment.stance || 'neutral'
+            stance: comment.stance || 'neutral',
+            ipAddress: comment.ip_address // Map snake_case DB field to camelCase API field
           };
         });
 
