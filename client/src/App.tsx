@@ -3,6 +3,7 @@ import { Sidebar } from './components/Sidebar';
 import { TopicCard } from './components/TopicCard';
 import { TopicDetailModal } from './components/TopicDetailModal';
 import { AuthModal } from './components/AuthModal'; // Import AuthModal
+import { ResetPasswordPage } from './components/ResetPasswordPage'; // Import ResetPasswordPage
 import { InvitationModal } from './components/InvitationModal';
 import { RulesModal } from './components/RulesModal';
 import { ContactModal } from './components/ContactModal';
@@ -11,6 +12,11 @@ import { Menu, LogIn, LogOut, Loader2, AlertCircle, Search, Flame, Clock, PenToo
 import { analyzeTopicVeracity } from './services/geminiService';
 
 const App: React.FC = () => {
+  // Check for Password Reset Route
+  if (window.location.pathname.startsWith('/reset-password/')) {
+    return <ResetPasswordPage />;
+  }
+
   const [user, setUser] = useState<User | null>(null);
   const [topics, setTopics] = useState<Topic[]>([]);
 
