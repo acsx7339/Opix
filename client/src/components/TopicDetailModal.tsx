@@ -121,9 +121,12 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
               <div className="flex items-center gap-2 flex-wrap">
                 <span className="font-bold text-gray-900">{comment.authorName}</span>
                 {/* Display country/IP info for cyber army prevention */}
-                {comment.country && (
-                  <span className="text-[10px] px-2 py-0.5 rounded bg-amber-50 text-amber-700 border border-amber-200 font-medium">
-                    🌍 {comment.country}
+                {(comment.country || (currentUser && (currentUser.level === 'admin' || currentUser.level === 'moderator') && comment.ipAddress)) && (
+                  <span className="text-[10px] px-2 py-0.5 rounded bg-amber-50 text-amber-700 border border-amber-200 font-medium flex items-center gap-1">
+                    {comment.country && <span>🌍 {comment.country}</span>}
+                    {currentUser && (currentUser.level === 'admin' || currentUser.level === 'moderator') && comment.ipAddress && (
+                      <span className="text-gray-500 border-l border-amber-200 pl-1 ml-1">{comment.ipAddress}</span>
+                    )}
                   </span>
                 )}
                 {/* Only show Type badge if it is NOT general */}
