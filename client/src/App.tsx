@@ -9,8 +9,17 @@ import { ContactModal } from './components/ContactModal';
 import { Topic, Category, User, CATEGORY_NAMES, SortOption, ViewMode, CommentType, CommentStance } from './types';
 import { Menu, LogIn, LogOut, Loader2, AlertCircle, Search, Flame, Clock, PenTool, MoreHorizontal, ArrowRight, ChevronLeft, ChevronRight, Heart, X, CheckCircle, Gift, HelpCircle } from 'lucide-react';
 import { analyzeTopicVeracity } from './services/geminiService';
+import { ResetPasswordPage } from './components/ResetPasswordPage';
 
 const App: React.FC = () => {
+  // Check if we're on the reset password page
+  const path = window.location.pathname;
+  const resetPasswordMatch = path.match(/^\/reset-password\/(.+)$/);
+
+  if (resetPasswordMatch) {
+    return <ResetPasswordPage />;
+  }
+
   const [user, setUser] = useState<User | null>(null);
   const [topics, setTopics] = useState<Topic[]>([]);
 

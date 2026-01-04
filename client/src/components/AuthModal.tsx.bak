@@ -246,29 +246,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onLoginSuccess })
                                 <div className="text-right">
                                     <button
                                         type="button"
-                                        onClick={async () => {
-                                            const username = prompt('請輸入您的使用者名稱：');
-                                            if (!username) return;
-
-                                            setIsLoading(true);
-                                            try {
-                                                const res = await fetch('/api/auth/forgot-password', {
-                                                    method: 'POST',
-                                                    headers: { 'Content-Type': 'application/json' },
-                                                    body: JSON.stringify({ username })
-                                                });
-                                                const data = await res.json();
-                                                if (res.ok) {
-                                                    alert(data.message || '重置連結已發送至您的註冊信箱');
-                                                } else {
-                                                    alert(data.error || '發送失敗');
-                                                }
-                                            } catch (err) {
-                                                alert('無法連接伺服器');
-                                            } finally {
-                                                setIsLoading(false);
-                                            }
-                                        }}
+                                        onClick={() => alert('請聯絡管理員重設密碼：acsx7339@gmail.com')}
                                         className="text-sm text-blue-600 hover:text-blue-800 hover:underline font-medium"
                                     >
                                         忘記密碼？
