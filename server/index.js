@@ -403,17 +403,40 @@ app.post('/api/auth/register', async (req, res) => {
   }
 
   try {
-    // Validate invitation code
-    const inviteResult = await pool.query(
-      'SELECT * FROM invitation_codes WHERE code = $1',
-      [invitationCode.toUpperCase()]
-    );
+    // Check user count for Early Access (First 50 users free)
+    const countResult = await pool.query('SELECT COUNT(*) FROM users');
+    const userCount = parseInt(countResult.rows[0].count);
+    const limit = 50;
+    const isEarlyAccess = userCount < limit;
 
-    if (inviteResult.rows.length === 0) {
-      return res.status(400).json({ error: '邀請碼不存在' });
+    let invite = null;
+
+    if (invitationCode) {
+      // Validate provided invitation code (even if optional)
+      const inviteResult = await pool.query(
+        'SELECT * FROM invitation_codes WHERE code = $1',
+        [invitationCode.toUpperCase()]
+      );
+
+      if (inviteResult.rows.length === 0) {
+        return res.status(400).json({ error: '邀請碼不存在' });
+      }
+
+      invite = inviteResult.rows[0];
+
+      if (invite.is_used) {
+        return res.status(400).json({ error: '此邀請碼已被使用' });
+      }
+
+      if (Date.now() > invite.expires_at) {
+        return res.status(400).json({ error: '邀請碼已過期' });
+      }
+    } else if (!isEarlyAccess) {
+      // Required if not early access
+      return res.status(400).json({ error: '目前為邀請制，請輸入邀請碼' });
     }
 
-    const invite = inviteResult.rows[0];
+
 
     if (invite.is_used) {
       return res.status(400).json({ error: '此邀請碼已被使用' });
@@ -439,18 +462,20 @@ app.post('/api/auth/register', async (req, res) => {
     const verificationToken = randomBytes(32).toString('hex');
     const avatarUrl = `https://api.dicebear.com/7.x/avataaars/svg?seed=${username}`;
 
-    // Create user with invited_by_user_id
+    // Create user with invited_by_user_id (null if no invite)
     await pool.query(
       `INSERT INTO users (id, email, username, password_hash, avatar_url, verification_token, created_at, invited_by_user_id) 
              VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
-      [id, email, username, hashedPassword, avatarUrl, verificationToken, Date.now(), invite.created_by_user_id]
+      [id, email, username, hashedPassword, avatarUrl, verificationToken, Date.now(), invite ? invite.created_by_user_id : null]
     );
 
-    // Mark invitation code as used
-    await pool.query(
-      'UPDATE invitation_codes SET is_used = true, used_by_user_id = $1, used_at = $2 WHERE code = $3',
-      [id, Date.now(), invitationCode.toUpperCase()]
-    );
+    // Mark invitation code as used if provided
+    if (invite) {
+      await pool.query(
+        'UPDATE invitation_codes SET is_used = true, used_by_user_id = $1, used_at = $2 WHERE code = $3',
+        [id, Date.now(), invitationCode.toUpperCase()]
+      );
+    }
 
     res.json({ success: true, message: '註冊成功！' });
   } catch (err) {
@@ -459,7 +484,25 @@ app.post('/api/auth/register', async (req, res) => {
   }
 });
 
-// 2. VERIFY EMAIL
+// 3. REGISTRATION STATUS (Early Access)
+app.get('/api/auth/registration-status', async (req, res) => {
+  try {
+    const countResult = await pool.query('SELECT COUNT(*) FROM users');
+    const count = parseInt(countResult.rows[0].count);
+    const limit = 50;
+
+    res.json({
+      invitationRequired: count >= limit,
+      remainingSlots: Math.max(0, limit - count),
+      isEarlyAccess: count < limit
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: '無法取得註冊狀態' });
+  }
+});
+
+// 4. LOGIN
 app.post('/api/auth/verify', async (req, res) => {
   res.json({ success: true, message: 'Verification skipped for demo.' });
 });
