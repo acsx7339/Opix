@@ -549,6 +549,132 @@ app.get('/api/auth/me', authenticateToken, async (req, res) => {
   }
 });
 
+// 5. FORGOT PASSWORD - Request password reset
+app.post('/api/auth/forgot-password', async (req, res) => {
+  const { username } = req.body;
+
+  if (!username) {
+    return res.status(400).json({ error: '請輸入使用者名稱' });
+  }
+
+  try {
+    // Check if user exists by username
+    const userResult = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
+
+    // Always return success to prevent username enumeration (though less sensitive than email)
+    if (userResult.rows.length === 0) {
+      return res.json({ success: true, message: '如果該使用者存在，重置連結已發送至註冊信箱' });
+    }
+
+    const user = userResult.rows[0];
+
+    if (!user.email) {
+      // Should not happen if email is required, but good safety check
+      return res.json({ success: true, message: '如果該使用者存在，重置連結已發送至註冊信箱' });
+    }
+
+    // Generate reset token (random 32-byte hex string)
+    const resetToken = randomBytes(32).toString('hex');
+    const resetTokenExpires = Date.now() + 3600000; // 1 hour from now
+
+    // Save token to database
+    await pool.query(
+      'UPDATE users SET reset_token = $1, reset_token_expires = $2 WHERE id = $3',
+      [resetToken, resetTokenExpires, user.id]
+    );
+
+    // Create reset URL
+    const resetUrl = `${process.env.DOMAIN || 'http://localhost:8081'}/reset-password/${resetToken}`;
+
+    // Send email
+    const transporter = nodemailer.createTransport({
+      host: process.env.SMTP_HOST || 'open.pc-baby.com',
+      port: parseInt(process.env.SMTP_PORT || '465'),
+      secure: process.env.SMTP_SECURE === 'true' || true,
+      auth: {
+        user: process.env.SMTP_USER || 'admin@open.pc-baby.com',
+        pass: process.env.SMTP_PASS
+      }
+    });
+
+    const mailOptions = {
+      from: process.env.SMTP_FROM || 'admin@open.pc-baby.com',
+      to: user.email, // Send to the user's registered email
+      subject: 'Opix 密碼重置請求',
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+          <h2 style="color: #2563eb;">Opix 密碼重置</h2>
+          <p>您好 <strong>${user.username}</strong>，</p>
+          <p>我們收到了您的密碼重置請求。請點擊以下連結重置您的密碼：</p>
+          <div style="margin: 30px 0;">
+            <a href="${resetUrl}" 
+               style="background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">
+              重置密碼
+            </a>
+          </div>
+          <p style="color: #6b7280; font-size: 14px;">
+            此連結將在<strong>1小時</strong>後失效。
+          </p>
+          <p style="color: #6b7280; font-size: 14px;">
+            如果您沒有提出密碼重置請求，請忽略此郵件。
+          </p>
+          <hr style="margin: 20px 0; border: none; border-top: 1px solid #e5e7eb;">
+          <p style="color: #9ca3af; font-size: 12px;">
+            直接複製連結：<br>
+            <code style="background-color: #f3f4f6; padding: 4px 8px; border-radius: 4px; display: block; margin-top: 8px; word-break: break-all;">${resetUrl}</code>
+          </p>
+        </div>
+      `
+    };
+
+    await transporter.sendMail(mailOptions);
+    console.log('✓ Password reset email sent to:', user.email);
+
+    res.json({ success: true, message: '如果該使用者存在，重置連結已發送至註冊信箱' });
+  } catch (err) {
+    console.error('Password reset error:', err);
+    res.status(500).json({ error: '發送重置郵件失敗，請稍後再試' });
+  }
+});
+
+// 6. RESET PASSWORD - Verify token and reset password
+app.post('/api/auth/reset-password/:token', async (req, res) => {
+  const { token } = req.params;
+  const { password } = req.body;
+
+  if (!password || password.length < 6) {
+    return res.status(400).json({ error: '密碼至少需要6個字元' });
+  }
+
+  try {
+    // Find user with valid token
+    const userResult = await pool.query(
+      'SELECT * FROM users WHERE reset_token = $1 AND reset_token_expires > $2',
+      [token, Date.now()]
+    );
+
+    if (userResult.rows.length === 0) {
+      return res.status(400).json({ error: '重置連結無效或已過期' });
+    }
+
+    const user = userResult.rows[0];
+
+    // Hash new password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Update password and clear reset token
+    await pool.query(
+      'UPDATE users SET password_hash = $1, reset_token = NULL, reset_token_expires = NULL WHERE id = $2',
+      [hashedPassword, user.id]
+    );
+
+    res.json({ success: true, message: '密碼重置成功！請使用新密碼登入' });
+  } catch (err) {
+    console.error('Password reset verification error:', err);
+    res.status(500).json({ error: '密碼重置失敗，請稍後再試' });
+  }
+});
+
 // Get user profile with full details
 app.get('/api/users/me/profile', authenticateToken, async (req, res) => {
   try {
