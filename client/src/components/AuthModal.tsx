@@ -7,7 +7,7 @@ interface AuthModalProps {
     onLoginSuccess: (user: UserType, token: string) => void;
 }
 
-type AuthMode = 'login' | 'register' | 'forgot-password';
+type AuthMode = 'login' | 'register';
 
 export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onLoginSuccess }) => {
     const [mode, setMode] = useState<AuthMode>('login');
@@ -17,7 +17,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onLoginSuccess })
     const [invitationCode, setInvitationCode] = useState('');
     const [codeValidating, setCodeValidating] = useState(false);
     const [codeValid, setCodeValid] = useState<boolean | null>(null);
-    const [forgotPasswordEmail, setForgotPasswordEmail] = useState('');
 
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -67,19 +66,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onLoginSuccess })
                     onClose();
                 } else {
                     setError(data.error || '登入失敗');
-                }
-            } else if (mode === 'forgot-password') {
-                const res = await fetch('/api/auth/forgot-password', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: forgotPasswordEmail })
-                });
-                const data = await res.json();
-
-                if (res.ok) {
-                    setSuccessMsg(data.message || '重置連結已發送至您的信箱，請檢查郵件');
-                } else {
-                    setError(data.error || '發送失敗');
                 }
             } else {
                 const res = await fetch('/api/auth/register', {
@@ -241,40 +227,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onLoginSuccess })
                                     />
                                 </div>
                             </div>
-
-                            {mode === 'login' && (
-                                <div className="text-right">
-                                    <button
-                                        type="button"
-                                        onClick={async () => {
-                                            const username = prompt('請輸入您的使用者名稱：');
-                                            if (!username) return;
-
-                                            setIsLoading(true);
-                                            try {
-                                                const res = await fetch('/api/auth/forgot-password', {
-                                                    method: 'POST',
-                                                    headers: { 'Content-Type': 'application/json' },
-                                                    body: JSON.stringify({ username })
-                                                });
-                                                const data = await res.json();
-                                                if (res.ok) {
-                                                    alert(data.message || '重置連結已發送至您的註冊信箱');
-                                                } else {
-                                                    alert(data.error || '發送失敗');
-                                                }
-                                            } catch (err) {
-                                                alert('無法連接伺服器');
-                                            } finally {
-                                                setIsLoading(false);
-                                            }
-                                        }}
-                                        className="text-sm text-blue-600 hover:text-blue-800 hover:underline font-medium"
-                                    >
-                                        忘記密碼？
-                                    </button>
-                                </div>
-                            )}
 
                             <button
                                 type="submit"

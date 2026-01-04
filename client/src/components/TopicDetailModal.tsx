@@ -120,10 +120,10 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
             <div className="flex justify-between items-center mb-2">
               <div className="flex items-center gap-2 flex-wrap">
                 <span className="font-bold text-gray-900">{comment.authorName}</span>
-                {/* Display IP info for cyber army prevention */}
-                {comment.ipAddress && (
-                  <span className="text-[10px] px-2 py-0.5 rounded bg-amber-50 text-amber-700 border border-amber-200 font-medium font-mono">
-                    🌐 {comment.ipAddress}
+                {/* Display country/IP info for cyber army prevention */}
+                {comment.country && (
+                  <span className="text-[10px] px-2 py-0.5 rounded bg-amber-50 text-amber-700 border border-amber-200 font-medium">
+                    🌍 {comment.country}
                   </span>
                 )}
                 {/* Only show Type badge if it is NOT general */}
