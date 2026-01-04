@@ -582,8 +582,18 @@ app.post('/api/auth/forgot-password', async (req, res) => {
       [resetToken, resetTokenExpires, user.id]
     );
 
+    // Determine domain based on NODE_ENV if DOMAIN is not explicitly set
+    let domain = process.env.DOMAIN;
+    if (!domain) {
+      if (process.env.NODE_ENV === 'production') {
+        domain = 'https://open.pc-baby.com';
+      } else {
+        domain = 'http://localhost:8081';
+      }
+    }
+
     // Create reset URL
-    const resetUrl = `${process.env.DOMAIN || 'http://localhost:8081'}/reset-password/${resetToken}`;
+    const resetUrl = `${domain}/reset-password/${resetToken}`;
 
     // Send email
     const transporter = nodemailer.createTransport({
