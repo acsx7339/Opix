@@ -500,7 +500,7 @@ const App: React.FC = () => {
           </button>
           <div className="flex items-center gap-2 cursor-pointer" onClick={() => handleSelectView('home')}>
             <img src="/opix-logo.png" className="w-8 h-8 rotate-3 shadow-md object-contain" alt="Opix Logo" />
-            <h1 className="text-2xl font-hand font-bold text-gray-800">Opix</h1>
+            <h1 className="text-2xl font-hand font-bold text-gray-800 hidden sm:block">Opix</h1>
           </div>
         </div>
 
@@ -570,14 +570,12 @@ const App: React.FC = () => {
 
       <div className="flex flex-1 relative">
         <Sidebar
-          user={user}
           viewMode={viewMode}
           selectedCategory={selectedCategory}
           onSelectView={handleSelectView}
           isOpen={isSidebarOpen}
           onCloseMobile={() => setIsSidebarOpen(false)}
           onContact={() => setIsContactModalOpen(true)}
-          onInvitation={() => setIsInvitationModalOpen(true)}
         />
         <main className="flex-1 p-4 md:p-8 overflow-y-auto max-w-6xl mx-auto w-full">
           {isLoading ? (

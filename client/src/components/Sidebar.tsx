@@ -43,9 +43,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ user, viewMode, selectedCatego
                     <h3 className="font-bold text-gray-800">{user.username}</h3>
                     <div className="flex items-center gap-2 text-xs mt-0.5">
                       <span className={`px-2 py-0.5 rounded-full font-bold ${user.level === 'moderator' ? 'bg-purple-100 text-purple-700' :
-                          user.level === 'expert' ? 'bg-blue-100 text-blue-700' :
-                            user.level === 'member' ? 'bg-green-100 text-green-700' :
-                              'bg-gray-100 text-gray-600'
+                        user.level === 'expert' ? 'bg-blue-100 text-blue-700' :
+                          user.level === 'member' ? 'bg-green-100 text-green-700' :
+                            'bg-gray-100 text-gray-600'
                         }`}>
                         {user.level === 'moderator' ? '版主' :
                           user.level === 'expert' ? '專家' :
