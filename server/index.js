@@ -398,8 +398,8 @@ app.get('/api/invitations/my-codes', authenticateToken, async (req, res) => {
 app.post('/api/auth/register', async (req, res) => {
   const { email, password, username, invitationCode } = req.body;
 
-  if (!email || !password || !username || !invitationCode) {
-    return res.status(400).json({ error: '所有欄位皆為必填（包含邀請碼）' });
+  if (!email || !password || !username) {
+    return res.status(400).json({ error: '所有欄位皆為必填' });
   }
 
   try {
@@ -436,15 +436,7 @@ app.post('/api/auth/register', async (req, res) => {
       return res.status(400).json({ error: '目前為邀請制，請輸入邀請碼' });
     }
 
-
-
-    if (invite.is_used) {
-      return res.status(400).json({ error: '此邀請碼已被使用' });
-    }
-
-    if (Date.now() > invite.expires_at) {
-      return res.status(400).json({ error: '邀請碼已過期' });
-    }
+    // Existing user checks...
 
     // Check existing users
     const userCheck = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
